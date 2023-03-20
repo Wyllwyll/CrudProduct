@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
-import { IsNumber } from 'class-validator/types/decorator/decorators';
+import { IsString, IsNumber } from 'class-validator';
 
 export class CreateProductDto {
 
