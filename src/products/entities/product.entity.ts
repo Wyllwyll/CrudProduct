@@ -24,8 +24,4 @@ export class Product extends BaseEntity {
     @ApiProperty()
     @Column()
     quantity: number
-
-
-
-
 }
