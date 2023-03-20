@@ -1,26 +1,54 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { Product } from './entities/product.entity';
 
 @Injectable()
 export class ProductsService {
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+
+  async createProduct(createProductDto: CreateProductDto) {
+    const newProduct = Product.create({
+      name: createProductDto.name,
+      price: createProductDto.price,
+      quantity: createProductDto.quantity
+    });
+    const product = await Product.save(newProduct);
+    return product
+  };
+
+
+
+  async findProducts() {
+    const products = await Product.find();
+    return products
   }
 
-  findAll() {
-    return `This action returns all products`;
+
+
+  async findOneProduct(productId: number) {
+    const product = await Product.findOneBy({ id: productId });
+    return product
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+
+
+  async updateProduct(id: number, updateProductDto: UpdateProductDto): Promise<Product | null> {
+    const product = await Product.findOneBy({ id });
+    if (product !== null) {
+      if (updateProductDto.name) product.name = updateProductDto.name
+      if (updateProductDto.price) product.price = updateProductDto.price
+      if (updateProductDto.quantity) product.quantity = updateProductDto.quantity
+
+      return await product.save();
+    }
+    return null;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(productId: number): Promise<Product | null> {
+    const product = await Product.findOneBy({ id: productId });
+    if (product !== null) {
+      await product.remove()
+    }
+    return product
   }
 }
