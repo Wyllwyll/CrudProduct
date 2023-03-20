@@ -44,6 +44,8 @@ export class ProductsService {
     return null;
   }
 
+
+
   async removeProduct(productId: number): Promise<Product | null> {
     const product = await Product.findOneBy({ id: productId });
     if (product !== null) {
